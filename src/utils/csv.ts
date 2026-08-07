@@ -68,7 +68,7 @@ export const parseCSVQuestions = (csvText: string): CSVParseResult => {
     if (!rawLine) continue;
 
     const cols = splitCSVLine(rawLine);
-    // Columns expected: No(0), Pertanyaan(1), A(2), B(3), C(4), D(5), Jawaban(6), Materi(7), Kesulitan(8), Poin(9), Penjelasan(10)
+    // Columns expected: No(0), Pertanyaan(1), A(2), B(3), C(4), D(5), Jawaban(6), Kelas/Materi...
     if (cols.length < 7) {
       errors.push(`Baris ${idx + 1}: Kolom kurang lengkap (minimal 7 kolom).`);
       continue;
@@ -80,10 +80,32 @@ export const parseCSVQuestions = (csvText: string): CSVParseResult => {
     const optionC = cols[4] || '';
     const optionD = cols[5] || '';
     const rawAnswer = (cols[6] || '').toUpperCase().trim();
-    const category = cols[7] || 'Umum';
-    const rawDifficulty = cols[8] || 'Mudah';
-    const rawPoints = parseInt(cols[9], 10) || 10;
-    const explanation = cols[10] || '';
+
+    let targetClass = 'Umum';
+    let category = 'Umum';
+    let rawDifficulty = 'Mudah';
+    let rawPoints = 10;
+    let explanation = '';
+
+    // Check if col 7 looks like a class (e.g. "Kelas 5", "Kelas 7", "Umum")
+    if (cols.length >= 12) {
+      targetClass = cols[7] || 'Umum';
+      category = cols[8] || 'Umum';
+      rawDifficulty = cols[9] || 'Mudah';
+      rawPoints = parseInt(cols[10], 10) || 10;
+      explanation = cols[11] || '';
+    } else if (cols[7] && (cols[7].toLowerCase().startsWith('kelas') || cols[7].toLowerCase() === 'umum')) {
+      targetClass = cols[7];
+      category = cols[8] || 'Umum';
+      rawDifficulty = cols[9] || 'Mudah';
+      rawPoints = parseInt(cols[10], 10) || 10;
+      explanation = cols[11] || '';
+    } else {
+      category = cols[7] || 'Umum';
+      rawDifficulty = cols[8] || 'Mudah';
+      rawPoints = parseInt(cols[9], 10) || 10;
+      explanation = cols[10] || '';
+    }
 
     if (!text) {
       errors.push(`Baris ${idx + 1}: Teks pertanyaan tidak boleh kosong.`);
@@ -119,6 +141,7 @@ export const parseCSVQuestions = (csvText: string): CSVParseResult => {
       difficulty,
       points: rawPoints > 0 ? rawPoints : 10,
       explanation,
+      targetClass,
     });
   }
 
@@ -130,7 +153,7 @@ export const parseCSVQuestions = (csvText: string): CSVParseResult => {
 };
 
 export const exportQuestionsToCSV = (questions: Question[]): void => {
-  const header = ['No', 'Pertanyaan', 'A', 'B', 'C', 'D', 'Jawaban', 'Materi', 'Kesulitan', 'Poin', 'Penjelasan'];
+  const header = ['No', 'Pertanyaan', 'A', 'B', 'C', 'D', 'Jawaban', 'Kelas', 'Materi', 'Kesulitan', 'Poin', 'Penjelasan'];
 
   const escapeCSV = (str: string | number) => {
     const val = String(str ?? '');
@@ -148,6 +171,7 @@ export const exportQuestionsToCSV = (questions: Question[]): void => {
     escapeCSV(q.optionC),
     escapeCSV(q.optionD),
     escapeCSV(q.correctAnswer),
+    escapeCSV(q.targetClass || 'Umum'),
     escapeCSV(q.category),
     escapeCSV(q.difficulty),
     q.points,

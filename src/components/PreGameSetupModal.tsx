@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Player, TeamColorKey, GameSettings, Question } from '../types';
-import { TEAM_COLORS, CATEGORIES_LIST } from '../data/defaultData';
-import { Users, Filter, Play, CheckCircle2 } from 'lucide-react';
+import { TEAM_COLORS, CATEGORIES_LIST, CLASSES_LIST } from '../data/defaultData';
+import { Users, Filter, Play, CheckCircle2, GraduationCap } from 'lucide-react';
 
 interface PreGameSetupProps {
   questions: Question[];
@@ -29,11 +29,18 @@ export const PreGameSetupModal: React.FC<PreGameSetupProps> = ({
     indonesia: TEAM_COLORS.indonesia.defaultName,
   });
 
+  const [selectedClasses, setSelectedClasses] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedDifficulties, setSelectedDifficulties] = useState<string[]>([]);
 
   const handleTeamNameChange = (key: TeamColorKey, newName: string) => {
     setTeamNames((prev) => ({ ...prev, [key]: newName }));
+  };
+
+  const toggleClass = (cls: string) => {
+    setSelectedClasses((prev) =>
+      prev.includes(cls) ? prev.filter((c) => c !== cls) : [...prev, cls]
+    );
   };
 
   const toggleCategory = (cat: string) => {
@@ -51,11 +58,14 @@ export const PreGameSetupModal: React.FC<PreGameSetupProps> = ({
   // Filter available questions
   const getFilteredQuestions = () => {
     return questions.filter((q) => {
+      const matchClass =
+        selectedClasses.length === 0 ||
+        selectedClasses.includes(q.targetClass || 'Umum');
       const matchCat =
         selectedCategories.length === 0 || selectedCategories.includes(q.category);
       const matchDiff =
         selectedDifficulties.length === 0 || selectedDifficulties.includes(q.difficulty);
-      return matchCat && matchDiff;
+      return matchClass && matchCat && matchDiff;
     });
   };
 
@@ -168,6 +178,46 @@ export const PreGameSetupModal: React.FC<PreGameSetupProps> = ({
               >
                 Kelola Bank Soal ({questions.length})
               </button>
+            </div>
+
+            {/* Filter by Target Class */}
+            <div className="bg-purple-50/70 p-3.5 rounded-2xl border-2 border-purple-200">
+              <div className="flex items-center gap-1.5 mb-2">
+                <GraduationCap className="w-4 h-4 text-purple-700" />
+                <span className="text-xs font-black text-purple-900 uppercase">
+                  Pilihan Kelas (Tingkat Pembelajaran):
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-1">
+                <button
+                  type="button"
+                  onClick={() => setSelectedClasses([])}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-black border transition-all cursor-pointer ${
+                    selectedClasses.length === 0
+                      ? 'bg-purple-700 text-white border-purple-800 shadow-xs'
+                      : 'bg-white text-purple-900 border-purple-200 hover:bg-purple-100'
+                  }`}
+                >
+                  Semua Kelas
+                </button>
+                {CLASSES_LIST.map((cls) => {
+                  const isChecked = selectedClasses.includes(cls);
+                  return (
+                    <button
+                      key={cls}
+                      type="button"
+                      onClick={() => toggleClass(cls)}
+                      className={`px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                        isChecked
+                          ? 'bg-purple-600 text-white border-purple-700 shadow-xs'
+                          : 'bg-white text-slate-700 border-slate-200 hover:bg-purple-50'
+                      }`}
+                    >
+                      {isChecked ? '☑ ' : '☐ '} {cls}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Filter by Category */}

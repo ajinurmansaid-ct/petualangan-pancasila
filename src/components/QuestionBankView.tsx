@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Question, Difficulty, CorrectAnswerOption } from '../types';
 import { parseCSVQuestions, exportQuestionsToCSV } from '../utils/csv';
-import { CATEGORIES_LIST } from '../data/defaultData';
+import { CATEGORIES_LIST, CLASSES_LIST } from '../data/defaultData';
 import {
   Plus,
   Edit2,
@@ -24,6 +24,7 @@ interface QuestionBankProps {
 
 export const QuestionBankView: React.FC<QuestionBankProps> = ({ questions, onSaveQuestions }) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedClassFilter, setSelectedClassFilter] = useState<string>('all');
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>('all');
   const [selectedDifficultyFilter, setSelectedDifficultyFilter] = useState<string>('all');
 
@@ -48,6 +49,7 @@ export const QuestionBankView: React.FC<QuestionBankProps> = ({ questions, onSav
     difficulty: Difficulty;
     points: number;
     explanation: string;
+    targetClass: string;
   }>({
     text: '',
     optionA: '',
@@ -59,18 +61,24 @@ export const QuestionBankView: React.FC<QuestionBankProps> = ({ questions, onSav
     difficulty: 'Mudah',
     points: 10,
     explanation: '',
+    targetClass: 'Kelas 4',
   });
 
   // Filtered List
   const filteredQuestions = questions.filter((q) => {
     const matchSearch =
       q.text.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      q.category.toLowerCase().includes(searchTerm.toLowerCase());
+      q.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (q.targetClass || 'Umum').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchClass =
+      selectedClassFilter === 'all' ||
+      q.targetClass === selectedClassFilter ||
+      (!q.targetClass && selectedClassFilter === 'Umum');
     const matchCategory =
       selectedCategoryFilter === 'all' || q.category === selectedCategoryFilter;
     const matchDifficulty =
       selectedDifficultyFilter === 'all' || q.difficulty === selectedDifficultyFilter;
-    return matchSearch && matchCategory && matchDifficulty;
+    return matchSearch && matchClass && matchCategory && matchDifficulty;
   });
 
   // Open Form for Create
@@ -87,6 +95,7 @@ export const QuestionBankView: React.FC<QuestionBankProps> = ({ questions, onSav
       difficulty: 'Mudah',
       points: 10,
       explanation: '',
+      targetClass: 'Kelas 4',
     });
     setIsFormOpen(true);
   };
@@ -105,6 +114,7 @@ export const QuestionBankView: React.FC<QuestionBankProps> = ({ questions, onSav
       difficulty: q.difficulty,
       points: q.points,
       explanation: q.explanation || '',
+      targetClass: q.targetClass || 'Umum',
     });
     setIsFormOpen(true);
   };
@@ -248,7 +258,7 @@ export const QuestionBankView: React.FC<QuestionBankProps> = ({ questions, onSav
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white p-4 rounded-2xl shadow-md border-2 border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="bg-white p-4 rounded-2xl shadow-md border-2 border-slate-200 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
         {/* Search Input */}
         <div className="relative">
           <Search className="w-4 h-4 absolute left-3 top-3.5 text-slate-400" />
@@ -256,10 +266,24 @@ export const QuestionBankView: React.FC<QuestionBankProps> = ({ questions, onSav
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Cari kata kunci soal / materi..."
+            placeholder="Cari kata kunci / materi..."
             className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 font-semibold text-sm text-slate-900 focus:border-red-500 focus:outline-none"
           />
         </div>
+
+        {/* Class Filter */}
+        <select
+          value={selectedClassFilter}
+          onChange={(e) => setSelectedClassFilter(e.target.value)}
+          className="w-full p-2.5 rounded-xl border border-slate-300 font-semibold text-sm text-slate-900 focus:border-red-500 focus:outline-none bg-amber-50/50"
+        >
+          <option value="all">Semua Kelas ({questions.length})</option>
+          {CLASSES_LIST.map((cls) => (
+            <option key={cls} value={cls}>
+              🏫 {cls}
+            </option>
+          ))}
+        </select>
 
         {/* Category Filter */}
         <select
@@ -267,7 +291,7 @@ export const QuestionBankView: React.FC<QuestionBankProps> = ({ questions, onSav
           onChange={(e) => setSelectedCategoryFilter(e.target.value)}
           className="w-full p-2.5 rounded-xl border border-slate-300 font-semibold text-sm text-slate-900 focus:border-red-500 focus:outline-none"
         >
-          <option value="all">Semua Materi ({questions.length})</option>
+          <option value="all">Semua Materi</option>
           {CATEGORIES_LIST.map((cat) => (
             <option key={cat} value={cat}>
               {cat}
@@ -281,7 +305,7 @@ export const QuestionBankView: React.FC<QuestionBankProps> = ({ questions, onSav
           onChange={(e) => setSelectedDifficultyFilter(e.target.value)}
           className="w-full p-2.5 rounded-xl border border-slate-300 font-semibold text-sm text-slate-900 focus:border-red-500 focus:outline-none"
         >
-          <option value="all">Semua Tingkat Kesulitan</option>
+          <option value="all">Semua Kesulitan</option>
           <option value="Mudah">Mudah</option>
           <option value="Sedang">Sedang</option>
           <option value="Sulit">Sulit</option>
@@ -296,6 +320,7 @@ export const QuestionBankView: React.FC<QuestionBankProps> = ({ questions, onSav
               <tr>
                 <th className="p-3 text-center w-12">No</th>
                 <th className="p-3">Pertanyaan</th>
+                <th className="p-3 w-28">Kelas</th>
                 <th className="p-3 w-36">Materi</th>
                 <th className="p-3 w-28 text-center">Kesulitan</th>
                 <th className="p-3 w-20 text-center">Poin</th>
@@ -306,9 +331,9 @@ export const QuestionBankView: React.FC<QuestionBankProps> = ({ questions, onSav
             <tbody className="divide-y divide-slate-200 font-medium">
               {filteredQuestions.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="text-center p-8 text-slate-500">
-                    <p className="text-base font-bold">⚠️ Belum ada soal yang sesuai.</p>
-                    <p className="text-xs mt-1">Silakan tambahkan soal baru atau sesuaikan kata kunci pencarian.</p>
+                  <td colSpan={8} className="text-center p-8 text-slate-500">
+                    <p className="text-base font-bold">⚠️ Belum ada soal yang sesuai filter/kelas ini.</p>
+                    <p className="text-xs mt-1">Silakan tambahkan soal baru atau sesuaikan filter kelas & materi.</p>
                   </td>
                 </tr>
               ) : (
@@ -321,6 +346,11 @@ export const QuestionBankView: React.FC<QuestionBankProps> = ({ questions, onSav
                         <span>A: {q.optionA}</span>
                         <span>• B: {q.optionB}</span>
                       </div>
+                    </td>
+                    <td className="p-3">
+                      <span className="text-xs font-bold bg-purple-50 text-purple-900 px-2 py-1 rounded-md border border-purple-200 inline-flex items-center gap-1">
+                        🏫 {q.targetClass || 'Umum'}
+                      </span>
                     </td>
                     <td className="p-3">
                       <span className="text-xs font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded-md border border-slate-200">
@@ -457,7 +487,22 @@ export const QuestionBankView: React.FC<QuestionBankProps> = ({ questions, onSav
               </div>
 
               {/* Correct Answer & Metadata */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                <div>
+                  <label className="text-xs font-bold text-purple-900 block mb-1">🏫 Target Kelas</label>
+                  <select
+                    value={formData.targetClass}
+                    onChange={(e) => setFormData({ ...formData, targetClass: e.target.value })}
+                    className="w-full p-2.5 rounded-xl border border-purple-300 font-bold text-sm bg-purple-50 text-purple-950 focus:border-purple-600"
+                  >
+                    {CLASSES_LIST.map((cls) => (
+                      <option key={cls} value={cls}>
+                        {cls}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <div>
                   <label className="text-xs font-bold text-slate-600 block mb-1">Kunci Jawaban</label>
                   <select

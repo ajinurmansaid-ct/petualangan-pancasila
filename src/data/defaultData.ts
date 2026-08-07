@@ -107,6 +107,22 @@ export const CATEGORIES_LIST = [
   'Persatuan dan Kesatuan',
 ];
 
+export const CLASSES_LIST = [
+  'Kelas 1',
+  'Kelas 2',
+  'Kelas 3',
+  'Kelas 4',
+  'Kelas 5',
+  'Kelas 6',
+  'Kelas 7',
+  'Kelas 8',
+  'Kelas 9',
+  'Kelas 10',
+  'Kelas 11',
+  'Kelas 12',
+  'Umum',
+];
+
 export const DEFAULT_QUESTIONS: Question[] = [
   {
     id: 'q1',
@@ -120,6 +136,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Mudah',
     points: 10,
     explanation: 'Pancasila disahkan sebagai dasar negara oleh PPKI pada tanggal 18 Agustus 1945 bersamaan dengan pengesahan UUD 1945.',
+    targetClass: 'Kelas 5',
   },
   {
     id: 'q2',
@@ -133,6 +150,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Mudah',
     points: 10,
     explanation: 'Sila ke-3 berbunyi Persatuan Indonesia dan dilambangkan dengan Pohon Beringin yang melambangkan tempat berteduh dan persatuan bangsa.',
+    targetClass: 'Kelas 4',
   },
   {
     id: 'q3',
@@ -146,6 +164,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Mudah',
     points: 10,
     explanation: 'Sila ke-4 menekankan pentingnya kerakyatan, musyawarah untuk mufakat, dan perwakilan dalam mengambil keputusan bersama.',
+    targetClass: 'Kelas 4',
   },
   {
     id: 'q4',
@@ -159,6 +178,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Mudah',
     points: 10,
     explanation: 'Undang-Undang Dasar Negara Republik Indonesia Tahun 1945 merupakan hukum dasar tertulis dan konstitusi tertinggi di Indonesia.',
+    targetClass: 'Kelas 7',
   },
   {
     id: 'q5',
@@ -172,6 +192,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Mudah',
     points: 10,
     explanation: 'Bhinneka Tunggal Ika berasal dari Kitab Sutasoma karangan Mpu Tantular yang berarti "Berbeda-beda tetapi tetap satu jua".',
+    targetClass: 'Kelas 4',
   },
   {
     id: 'q6',
@@ -185,6 +206,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Mudah',
     points: 10,
     explanation: 'Sikap saling menghormati dan memberi kesempatan beribadah adalah wujud nyata penerapan toleransi dan norma kesusilaan/sosial.',
+    targetClass: 'Kelas 5',
   },
   {
     id: 'q7',
@@ -198,6 +220,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Sedang',
     points: 10,
     explanation: 'Norma kesusilaan bersumber dari bisikan hati nurani manusia. Sanksi jika melanggarnya adalah rasa penyesalan atau bersalah.',
+    targetClass: 'Kelas 7',
   },
   {
     id: 'q8',
@@ -211,6 +234,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Sedang',
     points: 10,
     explanation: 'Pasal 31 Ayat (1) UUD NRI Tahun 1945 menyatakan bahwa "Setiap warga negara berhak mendapat pendidikan."',
+    targetClass: 'Kelas 8',
   },
   {
     id: 'q9',
@@ -224,6 +248,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Sedang',
     points: 10,
     explanation: 'Membayar pajak adalah kewajiban konstitusional warga negara untuk mendukung pembangunan nasional.',
+    targetClass: 'Kelas 6',
   },
   {
     id: 'q10',
@@ -237,6 +262,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Sedang',
     points: 10,
     explanation: 'Chauvinisme adalah rasa cinta tanah air yang berlebihan hingga merendahkan bangsa lain, yang bertentangan dengan prinsip nasionalisme Pancasila.',
+    targetClass: 'Kelas 9',
   },
   {
     id: 'q11',
@@ -250,6 +276,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Sedang',
     points: 10,
     explanation: 'Mahkamah Konstitusi (MK) berwenang menguji undang-undang terhadap UUD NRI Tahun 1945 (judicial review).',
+    targetClass: 'Kelas 8',
   },
   {
     id: 'q12',
@@ -263,6 +290,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Sedang',
     points: 10,
     explanation: 'Demokrasi Pancasila mengutamakan musyawarah untuk mufakat dengan diliputi semangat kekeluargaan.',
+    targetClass: 'Kelas 6',
   },
   {
     id: 'q13',
@@ -276,6 +304,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Mudah',
     points: 10,
     explanation: 'Bela negara bagi pelajar diwujudkan melalui pendidikan kewarganegaraan, belajar sungguh-sungguh, dan berprestasi.',
+    targetClass: 'Kelas 7',
   },
   {
     id: 'q14',
@@ -289,6 +318,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Sedang',
     points: 10,
     explanation: 'Ir. Soekarno menjabat sebagai ketua Panitia Sembilan yang berhasil menyusun Piagam Jakarta (Jakarta Charter) pada 22 Juni 1945.',
+    targetClass: 'Kelas 7',
   },
   {
     id: 'q15',
@@ -302,6 +332,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Sedang',
     points: 10,
     explanation: 'Hukum bersifat memaksa dan sanksinya tegas agar tercipta ketertiban, keadilan, dan kepastian hukum dalam masyarakat.',
+    targetClass: 'Kelas 8',
   },
   {
     id: 'q16',
@@ -315,6 +346,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Sedang',
     points: 10,
     explanation: 'Demokrasi yang sehat membutuhkan partisipasi serta pengawasan aktif masyarakat demi mewujudkan pemerintahan yang bersih dan transparan.',
+    targetClass: 'Kelas 9',
   },
   {
     id: 'q17',
@@ -328,6 +360,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Sulit',
     points: 15,
     explanation: 'Bab XA Pasal 28A hingga 28J UUD NRI 1945 memuat secara terperinci jaminan Hak Asasi Manusia (HAM).',
+    targetClass: 'Kelas 10',
   },
   {
     id: 'q18',
@@ -341,6 +374,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Mudah',
     points: 10,
     explanation: 'Pasal 1 Ayat (1) berbunyi: "Negara Indonesia ialah Negara Kesatuan, yang berbentuk Republik."',
+    targetClass: 'Kelas 5',
   },
   {
     id: 'q19',
@@ -354,6 +388,7 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Sulit',
     points: 15,
     explanation: 'Dalam Wawasan Nusantara, laut bukan pemisah melainkan perekat pemersatu pulau-pulau di NKRI.',
+    targetClass: 'Kelas 11',
   },
   {
     id: 'q20',
@@ -367,5 +402,6 @@ export const DEFAULT_QUESTIONS: Question[] = [
     difficulty: 'Sulit',
     points: 15,
     explanation: 'Deklarasi Djuanda 1957 mengubah konsep wilayah laut dari 3 mil menjadi laut teritorial 12 mil, menjadikannya pemersatu pulau-pulau NKRI.',
+    targetClass: 'Kelas 12',
   },
 ];
