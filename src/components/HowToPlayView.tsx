@@ -60,7 +60,7 @@ export const HowToPlayView: React.FC = () => {
     {
       no: '10',
       title: 'Kondisi Menang 🏆',
-      desc: 'Kelompok pertama yang mencapai Kotak 50 (FINISH) menjadi PEMENANG permainan!',
+      desc: 'Kelompok pertama yang mencapai Kotak 100 (FINISH) menjadi PEMENANG permainan!',
       icon: '🏆',
     },
   ];

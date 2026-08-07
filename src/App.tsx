@@ -166,15 +166,15 @@ export default function App() {
       const currentPos = activePlayer.position;
       const targetPos = currentPos + dice;
 
-      // Check Exact 50 Finish Condition
-      if (targetPos > 50) {
+      // Check Exact 100 Finish Condition
+      if (targetPos > 100) {
         soundFx.playWrong(settings.enableAudio);
         setEventModalData({
           type: 'over_roll',
-          title: '⚠️ ANGKA DADU MELEBIHI 50!',
-          message: `Angka dadu ${dice} terlalu besar untuk mencapai FINISH (kotak 50). ${activePlayer.name} tetap berada di kotak ${currentPos}.`,
+          title: '⚠️ ANGKA DADU MELEBIHI 100!',
+          message: `Angka dadu ${dice} terlalu besar untuk mencapai FINISH (kotak 100). ${activePlayer.name} tetap berada di kotak ${currentPos}.`,
         });
-        setMovementLog(`Dadu: ${dice} (melebihi 50) → Tetap di Kotak ${currentPos}`);
+        setMovementLog(`Dadu: ${dice} (melebihi 100) → Tetap di Kotak ${currentPos}`);
         return;
       }
 
@@ -209,8 +209,8 @@ export default function App() {
   const handleSquareLanding = (landSquare: number) => {
     const activePlayer = players[activePlayerIndex];
 
-    // 1. Check Finish (Square 50)
-    if (landSquare === 50) {
+    // 1. Check Finish (Square 100)
+    if (landSquare === 100) {
       handleWin(activePlayer);
       return;
     }
@@ -241,9 +241,9 @@ export default function App() {
           pointsDelta: settings.ladderPoints,
         });
 
-        // Check if ladder directly reached 50
-        if (ladder.to === 50) {
-          handleWin({ ...activePlayer, position: 50 });
+        // Check if ladder directly reached 100
+        if (ladder.to === 100) {
+          handleWin({ ...activePlayer, position: 100 });
         }
       }, 300);
       return;
@@ -379,7 +379,7 @@ export default function App() {
     } else {
       // Trigger question after ladder/snake landing
       const activePlayer = players[activePlayerIndex];
-      if (activePlayer && activePlayer.position < 50) {
+      if (activePlayer && activePlayer.position < 100) {
         triggerQuestionModal(false, false);
       } else {
         advanceTurn();
@@ -393,7 +393,7 @@ export default function App() {
     const durationSec = Math.floor((Date.now() - gameStartTime) / 1000);
     setGameDurationSeconds(durationSec);
 
-    const updatedWinner = { ...winnerPlayer, position: 50, isWinner: true };
+    const updatedWinner = { ...winnerPlayer, position: 100, isWinner: true };
     setWinner(updatedWinner);
 
     // Save Game History Item
@@ -468,7 +468,7 @@ export default function App() {
             ) : (
               /* Playing Mode Desktop/Mobile Layout */
               <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-                {/* Left Side: 50-Square Board (7 cols on desktop) */}
+                {/* Left Side: 100-Square Board (8 cols on desktop) */}
                 <div className="lg:col-span-8 flex flex-col gap-4">
                   <BoardComponent
                     players={players}

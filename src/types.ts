@@ -32,7 +32,7 @@ export interface Player {
   id: string;
   name: string;
   colorKey: TeamColorKey;
-  position: number; // 1 to 50
+  position: number; // 1 to 100
   score: number;
   correctAnswers: number;
   wrongAnswers: number;

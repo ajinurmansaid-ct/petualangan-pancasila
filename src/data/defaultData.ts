@@ -58,28 +58,32 @@ export const TEAM_COLORS: Record<TeamColorKey, TeamColorConfig> = {
 };
 
 export const LADDERS: Ladder[] = [
-  { from: 3, to: 14 },
-  { from: 7, to: 22 },
-  { from: 11, to: 29 },
-  { from: 17, to: 34 },
-  { from: 24, to: 41 },
-  { from: 31, to: 45 },
-  { from: 38, to: 49 },
+  { from: 3, to: 22 },
+  { from: 8, to: 30 },
+  { from: 19, to: 38 },
+  { from: 28, to: 84 },
+  { from: 36, to: 55 },
+  { from: 51, to: 67 },
+  { from: 62, to: 81 },
+  { from: 71, to: 91 },
+  { from: 78, to: 98 },
 ];
 
 export const SNAKES: Snake[] = [
-  { from: 16, to: 6 },
-  { from: 27, to: 12 },
-  { from: 35, to: 20 },
-  { from: 43, to: 26 },
-  { from: 46, to: 37 },
-  { from: 48, to: 32 },
-  { from: 49, to: 39 },
+  { from: 17, to: 6 },
+  { from: 34, to: 12 },
+  { from: 48, to: 26 },
+  { from: 64, to: 36 },
+  { from: 73, to: 53 },
+  { from: 87, to: 24 },
+  { from: 93, to: 73 },
+  { from: 95, to: 75 },
+  { from: 99, to: 78 },
 ];
 
-export const BONUS_SQUARES = [5, 25, 40];
-export const DOUBLE_POINT_SQUARES = [9, 30, 44];
-export const CHALLENGE_SQUARES = [15, 36];
+export const BONUS_SQUARES = [5, 25, 45, 65, 85];
+export const DOUBLE_POINT_SQUARES = [12, 32, 52, 72, 92];
+export const CHALLENGE_SQUARES = [18, 42, 68, 88];
 
 export const DEFAULT_SETTINGS: GameSettings = {
   timerSeconds: 20,

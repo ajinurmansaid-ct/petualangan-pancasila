@@ -11,19 +11,19 @@ interface BoardProps {
   movingPlayerId?: string | null;
 }
 
-// Convert square number N (1..50) to grid coordinates
+// Convert square number N (1..100) to grid coordinates
 export const getSquareCoords = (squareNum: number): { xPct: number; yPct: number; gridRow: number; gridCol: number } => {
-  const zeroBased = squareNum - 1;
-  const rowIndexFromBottom = Math.floor(zeroBased / 10); // 0 (1-10) to 4 (41-50)
+  const zeroBased = Math.max(0, Math.min(99, squareNum - 1));
+  const rowIndexFromBottom = Math.floor(zeroBased / 10); // 0 (1-10) to 9 (91-100)
   const isEvenRow = rowIndexFromBottom % 2 === 0;
 
   const colIndex = isEvenRow ? zeroBased % 10 : 9 - (zeroBased % 10); // 0..9
-  const gridRow = 4 - rowIndexFromBottom; // 0 (top: 41-50) to 4 (bottom: 1-10)
+  const gridRow = 9 - rowIndexFromBottom; // 0 (top: 91-100) to 9 (bottom: 1-10)
   const gridCol = colIndex;
 
   return {
     xPct: (gridCol + 0.5) * 10,
-    yPct: (gridRow + 0.5) * 20,
+    yPct: (gridRow + 0.5) * 10,
     gridRow,
     gridCol,
   };
@@ -37,9 +37,9 @@ export const BoardComponent: React.FC<BoardProps> = ({
   enableSpecialSquares,
   movingPlayerId,
 }) => {
-  // Generate 50 squares in top-down display order
+  // Generate 100 squares in top-down display order (rows 9 down to 0)
   const rows: number[][] = [];
-  for (let r = 4; r >= 0; r--) {
+  for (let r = 9; r >= 0; r--) {
     const rowSquares: number[] = [];
     const isEvenRowFromBottom = r % 2 === 0;
     const startNum = r * 10 + 1;
@@ -53,7 +53,7 @@ export const BoardComponent: React.FC<BoardProps> = ({
 
   // Helper to determine square theme colors
   const getSquareBg = (num: number): string => {
-    if (num === 50) return 'bg-gradient-to-br from-amber-300 via-amber-400 to-amber-500 text-amber-950 font-black border-2 border-amber-600 shadow-inner';
+    if (num === 100) return 'bg-gradient-to-br from-amber-300 via-amber-400 to-amber-500 text-amber-950 font-black border-2 border-amber-600 shadow-inner';
     if (num === 1) return 'bg-gradient-to-br from-emerald-100 to-emerald-200 text-emerald-900 font-bold border border-emerald-300';
 
     const isLadderStart = ladders.some((l) => l.from === num);
@@ -76,12 +76,12 @@ export const BoardComponent: React.FC<BoardProps> = ({
   };
 
   return (
-    <div className="relative w-full aspect-[10/5] bg-gradient-to-br from-amber-50 via-red-50 to-amber-100 rounded-2xl p-2 sm:p-3 shadow-2xl border-4 border-amber-500 overflow-hidden select-none">
+    <div className="relative w-full aspect-square bg-gradient-to-br from-amber-50 via-red-50 to-amber-100 rounded-2xl p-1.5 sm:p-2.5 shadow-2xl border-4 border-amber-500 overflow-hidden select-none">
       {/* Background Decorative Pattern */}
       <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#b91c1c_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
 
-      {/* Grid Container */}
-      <div className="relative w-full h-full grid grid-rows-5 grid-cols-10 gap-1 sm:gap-1.5">
+      {/* Grid Container (10x10) */}
+      <div className="relative w-full h-full grid grid-rows-10 grid-cols-10 gap-0.5 sm:gap-1">
         {rows.map((rowSquares) =>
           rowSquares.map((num) => {
             const ladderInfo = ladders.find((l) => l.from === num);
@@ -93,24 +93,24 @@ export const BoardComponent: React.FC<BoardProps> = ({
             return (
               <div
                 key={`sq-${num}`}
-                className={`relative rounded-xl flex flex-col justify-between p-1 sm:p-1.5 transition-all shadow-xs overflow-hidden ${getSquareBg(
+                className={`relative rounded-lg sm:rounded-xl flex flex-col justify-between p-0.5 sm:p-1 transition-all shadow-xs overflow-hidden ${getSquareBg(
                   num
                 )}`}
               >
                 {/* Square Number */}
                 <div className="flex items-center justify-between w-full">
                   <span
-                    className={`text-xs sm:text-sm md:text-base font-black px-1 rounded-sm ${
-                      num === 50 ? 'bg-amber-900 text-amber-200' : 'text-slate-700'
+                    className={`text-[9px] sm:text-xs md:text-sm font-black px-0.5 rounded-xs ${
+                      num === 100 ? 'bg-amber-900 text-amber-200' : 'text-slate-700'
                     }`}
                   >
                     {num}
                   </span>
 
                   {/* Badges / Icons */}
-                  <div className="text-xs sm:text-sm font-bold flex items-center gap-0.5">
-                    {num === 50 && <span title="Finish">🏆</span>}
-                    {num === 1 && <span className="text-[10px] font-bold text-emerald-700 bg-emerald-200 px-1 rounded">START</span>}
+                  <div className="text-[10px] sm:text-xs font-bold flex items-center gap-0.5">
+                    {num === 100 && <span title="Finish">🏆</span>}
+                    {num === 1 && <span className="text-[8px] sm:text-[10px] font-bold text-emerald-700 bg-emerald-200 px-0.5 rounded">START</span>}
                     {ladderInfo && <span title={`Naik ke ${ladderInfo.to}`}>🪜</span>}
                     {snakeInfo && <span title={`Turun ke ${snakeInfo.to}`}>🐍</span>}
                     {isBonus && <span title="Bonus +10 Poin">⭐</span>}
@@ -120,8 +120,8 @@ export const BoardComponent: React.FC<BoardProps> = ({
                 </div>
 
                 {/* Question Icon on non-special squares for visual clarity */}
-                {!ladderInfo && !snakeInfo && !isBonus && !isDouble && !isChallenge && num !== 1 && num !== 50 && num % 2 === 0 && (
-                  <div className="absolute bottom-1 right-1 opacity-20 text-xs sm:text-sm">❓</div>
+                {!ladderInfo && !snakeInfo && !isBonus && !isDouble && !isChallenge && num !== 1 && num !== 100 && num % 2 === 0 && (
+                  <div className="absolute bottom-0.5 right-0.5 opacity-20 text-[9px] sm:text-xs">❓</div>
                 )}
               </div>
             );
