@@ -1,6 +1,6 @@
 {
   "name": "Ular Tangga PPKn - Jelajah Pancasila",
-  "description": "Aplikasi permainan ular tangga interaktif 100 kotak untuk pembelajaran PPKn kelas dengan bank soal guru, timer, audio, dan papan skor.",
+  "description": "Aplikasi permainan ular tangga interaktif 100 kotak untuk pembelajaran berbagai mata pelajaran (PPKn, IPS, IPA, Bahasa Indonesia, Matematika, dll) dan semua jenjang kelas dengan bank soal, filter mapel, timer, audio, dan papan skor.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

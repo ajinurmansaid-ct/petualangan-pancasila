@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Player, TeamColorKey, GameSettings, Question } from '../types';
-import { TEAM_COLORS, CATEGORIES_LIST, CLASSES_LIST } from '../data/defaultData';
-import { Users, Filter, Play, CheckCircle2, GraduationCap } from 'lucide-react';
+import { TEAM_COLORS, CATEGORIES_LIST, CLASSES_LIST, SUBJECTS_LIST } from '../data/defaultData';
+import { Users, Filter, Play, CheckCircle2, GraduationCap, BookOpen } from 'lucide-react';
 
 interface PreGameSetupProps {
   questions: Question[];
@@ -29,12 +29,19 @@ export const PreGameSetupModal: React.FC<PreGameSetupProps> = ({
     indonesia: TEAM_COLORS.indonesia.defaultName,
   });
 
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [selectedClasses, setSelectedClasses] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedDifficulties, setSelectedDifficulties] = useState<string[]>([]);
 
   const handleTeamNameChange = (key: TeamColorKey, newName: string) => {
     setTeamNames((prev) => ({ ...prev, [key]: newName }));
+  };
+
+  const toggleSubject = (subj: string) => {
+    setSelectedSubjects((prev) =>
+      prev.includes(subj) ? prev.filter((s) => s !== subj) : [...prev, subj]
+    );
   };
 
   const toggleClass = (cls: string) => {
@@ -58,6 +65,9 @@ export const PreGameSetupModal: React.FC<PreGameSetupProps> = ({
   // Filter available questions
   const getFilteredQuestions = () => {
     return questions.filter((q) => {
+      const matchSubject =
+        selectedSubjects.length === 0 ||
+        selectedSubjects.includes(q.subject || 'PPKn / Pendidikan Pancasila');
       const matchClass =
         selectedClasses.length === 0 ||
         selectedClasses.includes(q.targetClass || 'Umum');
@@ -65,7 +75,7 @@ export const PreGameSetupModal: React.FC<PreGameSetupProps> = ({
         selectedCategories.length === 0 || selectedCategories.includes(q.category);
       const matchDiff =
         selectedDifficulties.length === 0 || selectedDifficulties.includes(q.difficulty);
-      return matchClass && matchCat && matchDiff;
+      return matchSubject && matchClass && matchCat && matchDiff;
     });
   };
 
@@ -102,7 +112,7 @@ export const PreGameSetupModal: React.FC<PreGameSetupProps> = ({
           PENGATURAN PEMAIN & SOAL
         </h1>
         <p className="text-sm text-red-100 mt-1 max-w-xl mx-auto">
-          Atur jumlah kelompok, ganti nama tim, dan pilih kategori materi PPKn sebelum memulai permainan di kelas.
+          Atur jumlah kelompok, ganti nama tim, dan pilih mata pelajaran, kelas, serta materi sebelum memulai permainan edukasi.
         </p>
       </div>
 
@@ -178,6 +188,46 @@ export const PreGameSetupModal: React.FC<PreGameSetupProps> = ({
               >
                 Kelola Bank Soal ({questions.length})
               </button>
+            </div>
+
+            {/* Filter by Subject */}
+            <div className="bg-indigo-50/80 p-3.5 rounded-2xl border-2 border-indigo-200">
+              <div className="flex items-center gap-1.5 mb-2">
+                <BookOpen className="w-4 h-4 text-indigo-700" />
+                <span className="text-xs font-black text-indigo-950 uppercase">
+                  Pilihan Mata Pelajaran (Mapel):
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto p-1">
+                <button
+                  type="button"
+                  onClick={() => setSelectedSubjects([])}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-black border transition-all cursor-pointer ${
+                    selectedSubjects.length === 0
+                      ? 'bg-indigo-700 text-white border-indigo-800 shadow-xs'
+                      : 'bg-white text-indigo-900 border-indigo-200 hover:bg-indigo-100'
+                  }`}
+                >
+                  Semua Mapel
+                </button>
+                {SUBJECTS_LIST.map((subj) => {
+                  const isChecked = selectedSubjects.includes(subj);
+                  return (
+                    <button
+                      key={subj}
+                      type="button"
+                      onClick={() => toggleSubject(subj)}
+                      className={`px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                        isChecked
+                          ? 'bg-indigo-600 text-white border-indigo-700 shadow-xs'
+                          : 'bg-white text-slate-700 border-slate-200 hover:bg-indigo-50'
+                      }`}
+                    >
+                      {isChecked ? '☑ ' : '☐ '} {subj}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Filter by Target Class */}

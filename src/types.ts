@@ -15,6 +15,7 @@ export interface Question {
   points: number;
   explanation: string;
   targetClass?: string; // e.g. 'Kelas 4', 'Kelas 5', 'Kelas 6', 'Umum'
+  subject?: string; // e.g. 'PPKn', 'IPS', 'IPA', 'Bahasa Indonesia', 'Matematika'
 }
 
 export type TeamColorKey = 'garuda' | 'nusantara' | 'pancasila' | 'merahputih' | 'bhinneka' | 'indonesia';
@@ -72,6 +73,7 @@ export interface GameSettings {
   selectedCategories: string[]; // [] means all
   selectedDifficulties: Difficulty[]; // [] means all
   selectedClasses?: string[]; // [] means all
+  selectedSubjects?: string[]; // [] means all
 }
 
 export interface GameHistoryItem {

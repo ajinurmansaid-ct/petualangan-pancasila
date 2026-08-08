@@ -81,14 +81,22 @@ export const parseCSVQuestions = (csvText: string): CSVParseResult => {
     const optionD = cols[5] || '';
     const rawAnswer = (cols[6] || '').toUpperCase().trim();
 
+    let subject = 'PPKn / Pendidikan Pancasila';
     let targetClass = 'Umum';
     let category = 'Umum';
     let rawDifficulty = 'Mudah';
     let rawPoints = 10;
     let explanation = '';
 
-    // Check if col 7 looks like a class (e.g. "Kelas 5", "Kelas 7", "Umum")
-    if (cols.length >= 12) {
+    // Standard format with Mapel: No(0), Text(1), A(2), B(3), C(4), D(5), Answer(6), Mapel(7), Kelas(8), Materi(9), Kesulitan(10), Poin(11), Penjelasan(12)
+    if (cols.length >= 13) {
+      subject = cols[7] || 'PPKn / Pendidikan Pancasila';
+      targetClass = cols[8] || 'Umum';
+      category = cols[9] || 'Umum';
+      rawDifficulty = cols[10] || 'Mudah';
+      rawPoints = parseInt(cols[11], 10) || 10;
+      explanation = cols[12] || '';
+    } else if (cols.length >= 12) {
       targetClass = cols[7] || 'Umum';
       category = cols[8] || 'Umum';
       rawDifficulty = cols[9] || 'Mudah';
@@ -142,6 +150,7 @@ export const parseCSVQuestions = (csvText: string): CSVParseResult => {
       points: rawPoints > 0 ? rawPoints : 10,
       explanation,
       targetClass,
+      subject,
     });
   }
 
@@ -153,7 +162,7 @@ export const parseCSVQuestions = (csvText: string): CSVParseResult => {
 };
 
 export const exportQuestionsToCSV = (questions: Question[]): void => {
-  const header = ['No', 'Pertanyaan', 'A', 'B', 'C', 'D', 'Jawaban', 'Kelas', 'Materi', 'Kesulitan', 'Poin', 'Penjelasan'];
+  const header = ['No', 'Pertanyaan', 'A', 'B', 'C', 'D', 'Jawaban', 'Mapel', 'Kelas', 'Materi', 'Kesulitan', 'Poin', 'Penjelasan'];
 
   const escapeCSV = (str: string | number) => {
     const val = String(str ?? '');
@@ -171,6 +180,7 @@ export const exportQuestionsToCSV = (questions: Question[]): void => {
     escapeCSV(q.optionC),
     escapeCSV(q.optionD),
     escapeCSV(q.correctAnswer),
+    escapeCSV(q.subject || 'PPKn / Pendidikan Pancasila'),
     escapeCSV(q.targetClass || 'Umum'),
     escapeCSV(q.category),
     escapeCSV(q.difficulty),

@@ -30,14 +30,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold bg-amber-400 text-red-900 px-2 py-0.5 rounded-full tracking-wider uppercase shadow-xs">
-                  PPKn Interactive
+                  Multi-Mapel Edukasi
                 </span>
                 <span className="text-xs bg-red-900/60 text-amber-200 px-2 py-0.5 rounded-full border border-amber-400/40">
-                  SMP / MA
+                  SD / SMP / SMA / MA
                 </span>
               </div>
               <h1 className="text-xl md:text-2xl font-black tracking-tight drop-shadow-md text-amber-300">
-                ULAR TANGGA PPKn <span className="text-white text-lg font-medium italic">“Jelajah Pancasila”</span>
+                ULAR TANGGA EDUKASI <span className="text-white text-lg font-medium italic">“Jelajah Nusantara”</span>
               </h1>
             </div>
           </div>
